@@ -28,7 +28,7 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
     public E get(int index) {
         Objects.checkIndex(index, size);
         Node<E> node = head;
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < index; i++) {
             if (i == index) {
                 break;
             }
@@ -50,7 +50,6 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
 
             @Override
             public E next() {
-                checkForModification();
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
