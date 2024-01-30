@@ -10,7 +10,7 @@ public class SimpleLinkedList<E> implements SimpleLinked<E> {
 
     @Override
     public void add(E value) {
-        Node<E> newNode = new Node(value, null);
+        Node<E> newNode = new Node<>(value, null);
         if (size == 0) {
             head = newNode;
         } else {

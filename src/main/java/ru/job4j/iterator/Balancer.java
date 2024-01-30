@@ -7,7 +7,7 @@ import java.util.List;
 public class Balancer {
     public static void split(List<ArrayList<Integer>> nodes, Iterator<Integer> source) {
         while (source.hasNext()) {
-            for (List node : nodes) {
+            for (List<Integer> node : nodes) {
                 if (!source.hasNext()) {
                     break;
                 }

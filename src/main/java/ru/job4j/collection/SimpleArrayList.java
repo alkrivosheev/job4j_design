@@ -9,7 +9,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
 
     public SimpleArrayList(int capacity) {
-        container = (T[]) new Object[capacity];
+                container = (T[]) new Object[capacity];
     }
 
     @Override
