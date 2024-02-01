@@ -38,12 +38,14 @@ public class ForwardLinked<T> implements Iterable<T> {
         if (head == null) {
             throw new NoSuchElementException();
         }
-        T deletedNode = get(0);
+        T deletedNode = head.item;
         ForwardLinked.Node<T> nextNode = head.next;
         head.item = null;
         head.next = null;
         head = nextNode;
-        return (T) deletedNode;
+        size--;
+        modCount++;
+        return deletedNode;
     }
 
     @Override
