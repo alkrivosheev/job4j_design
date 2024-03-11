@@ -16,13 +16,17 @@ public class User {
         this.birthday = birthday;
     }
 
-    /*@Override
+    @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         User user = (User) o;
         return children == user.children && Objects.equals(name, user.name) && Objects.equals(birthday, user.birthday);
-    }*/
+    }
 
     @Override
     public String toString() {
@@ -32,6 +36,16 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(name, children, birthday);
+    }
+
+    public static String binary(int number) {
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < 32; i++) {
+            buffer.append(number % 2 == 0 ? 0 : 1);
+            buffer.append((i + 1) % 8 == 0 ? " " : "");
+            number /= 2;
+        }
+        return buffer.reverse().toString();
     }
 
     public static void main(String[] args) {
@@ -55,6 +69,8 @@ public class User {
         System.out.printf("user2 - хэшкод: %s, хэш: %s, бакет: %s", hashCode2, hash2, bucket2);
         System.out.println();
         System.out.println(map.keySet());
+        System.out.println(binary(hashCode2));
+        System.out.println(binary(hash2));
     }
 
 }
