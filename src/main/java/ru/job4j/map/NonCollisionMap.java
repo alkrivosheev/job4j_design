@@ -22,7 +22,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     public boolean put(K key, V value) {
         boolean ret = false;
         int index = tableIndex(key);
-        if (index >= capacity * LOAD_FACTOR) {
+        if ((float) count / capacity >= LOAD_FACTOR) {
             expand();
             index = tableIndex(key);
         }
@@ -59,9 +59,10 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     private void expand() {
         MapEntry<K, V>[] newTable = new MapEntry[capacity * 2];
+        int oldCapacity = capacity;
         capacity = capacity * 2;
         K key;
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < oldCapacity; i++) {
             if (table[i] != null) {
                 key = table[i].key;
                 int index = tableIndex(key);

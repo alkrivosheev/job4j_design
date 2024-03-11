@@ -41,6 +41,38 @@ class NonCollisionMapTest {
     }
 
     @Test
+    void whenPut8() {
+        assertThat(map.put(5, "5")).isTrue();
+        assertThat(map).hasSize(5);
+        assertThat(map.put(6, "6")).isTrue();
+        assertThat(map).hasSize(6);
+        assertThat(map.put(7, "7")).isTrue();
+        assertThat(map.get(7)).isEqualTo("7");
+        assertThat(map).hasSize(7);
+    }
+
+    @Test
+    void whenGet24() {
+        assertThat(map.put(24, "79")).isTrue();
+        assertThat(map).hasSize(5).contains(24, 1, 2, 3, 4);
+        assertThat(map.get(24)).isEqualTo("79");
+    }
+
+    @Test
+    void whenGet4() {
+        assertThat(map.put(4, "13")).isFalse();
+        assertThat(map.get(4)).isEqualTo("4");
+    }
+
+    @Test
+    void whenPutFalse() {
+        assertThat(map.put(4, "4")).isFalse();
+        assertThat(map).hasSize(4);
+        assertThat(map.put(14, "14")).isTrue();
+        assertThat(map).hasSize(5);
+    }
+
+    @Test
     void whenCheckRemove() {
         assertThat(map.remove(2)).isTrue();
         assertThat(map).hasSize(3);
@@ -48,6 +80,28 @@ class NonCollisionMapTest {
         assertThat(map).hasSize(3);
         assertThat(map.remove(5)).isFalse();
         assertThat(map).hasSize(3);
+    }
+
+    @Test
+    void whenRemove16() {
+        assertThat(map.put(5, "5")).isTrue();
+        assertThat(map).hasSize(5);
+        assertThat(map.put(6, "6")).isTrue();
+        assertThat(map).hasSize(6);
+        assertThat(map.put(7, "7")).isTrue();
+        assertThat(map).hasSize(7);
+        assertThat(map.put(10, "10")).isTrue();
+        assertThat(map).hasSize(8);
+        assertThat(map.remove(10)).isTrue();
+        assertThat(map).hasSize(7);
+    }
+
+    @Test
+    void whenRemove5() {
+        assertThat(map.put(5, "5")).isTrue();
+        assertThat(map.put(5, "5")).isFalse();
+        assertThat(map.remove(5)).isTrue();
+        assertThat(map.put(5, "5")).isTrue();
     }
 
     @Test
@@ -79,6 +133,26 @@ class NonCollisionMapTest {
         map.remove(1);
         assertThatThrownBy(iterator::hasNext)
                 .isInstanceOf(ConcurrentModificationException.class);
+    }
+
+    @Test
+    void whenConcurrentIteratorException() {
+        Iterator<Integer> iterator = map.iterator();
+        map.remove(1);
+        map.put(5, "5");
+        assertThatThrownBy(iterator::hasNext)
+                .isInstanceOf(ConcurrentModificationException.class);
+    }
+
+    @Test
+    void whenConcurrentIteratorNext() {
+        map.put(5, "5");
+        Iterator<Integer> iterator = map.iterator();
+        assertThat(iterator.next()).isEqualTo(1);
+        assertThat(iterator.next()).isEqualTo(2);
+        assertThat(iterator.next()).isEqualTo(3);
+        assertThat(iterator.next()).isEqualTo(4);
+        assertThat(iterator.next()).isEqualTo(5);
     }
 
     @Test
