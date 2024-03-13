@@ -21,11 +21,10 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public boolean put(K key, V value) {
         boolean ret = false;
-        int index = tableIndex(key);
         if ((float) count / capacity >= LOAD_FACTOR) {
             expand();
-            index = tableIndex(key);
         }
+        int index = tableIndex(key);
         if (table[index] == null) {
             table[index] = new MapEntry<>(key, value);
             count++;
