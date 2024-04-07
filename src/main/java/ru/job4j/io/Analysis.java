@@ -26,7 +26,7 @@ public class Analysis {
         writeLog(writeLog, target);
     }
 
-    private void writeLog (StringJoiner log, String target) {
+    private void writeLog(StringJoiner log, String target) {
         try (BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(target))) {
             output.write(log.toString().getBytes());
         } catch (Exception e) {
