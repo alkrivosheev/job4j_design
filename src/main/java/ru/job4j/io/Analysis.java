@@ -5,30 +5,29 @@ import java.util.*;
 
 public class Analysis {
     public void unavailable(String source, String target) {
-        StringJoiner writeLog = new StringJoiner("");
-        try (BufferedReader input = new BufferedReader(new FileReader(source))) {
+        try (BufferedReader input = new BufferedReader(new FileReader(source));
+        BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(target))) {
+            StringBuilder builder = new StringBuilder();
             boolean servOnline = true;
             for (String line = input.readLine(); line != null; line = input.readLine()) {
                 if (!"".equals(line)) {
                     String[] state = line.split(" ", 2);
                     if (servOnline && "500".equals(state[0]) | "400".equals(state[0])) {
                         servOnline = false;
-                        writeLog.add(state[1] + ";");
+                        builder.append(state[1]);
+                        builder.append(";");
+                        output.write(builder.toString().getBytes());
+                        builder.setLength(0);
                     } else if (!servOnline && "300".equals(state[0]) | "200".equals(state[0])) {
                         servOnline = true;
-                        writeLog.add(state[1] + ";" + System.lineSeparator());
+                        builder.append(state[1]);
+                        builder.append(";");
+                        builder.append(System.lineSeparator());
+                        output.write(builder.toString().getBytes());
+                        builder.setLength(0);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        writeLog(writeLog, target);
-    }
-
-    private void writeLog(StringJoiner log, String target) {
-        try (BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(target))) {
-            output.write(log.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
