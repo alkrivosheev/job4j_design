@@ -11,15 +11,13 @@ import java.util.Map;
 
 public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
 
-    private Map<FileProperty, String> files;
-    private Map<FileProperty, List<String>> dubFiles;
+    private Map<FileProperty, List<Path>> dubFiles;
 
     public DuplicatesVisitor() {
-        this.files = new HashMap<>();
         this.dubFiles = new HashMap<>();
     }
 
-    public Map<FileProperty, List<String>> getDubFiles() {
+    public Map<FileProperty, List<Path>> getDubFiles() {
         return this.dubFiles;
     }
     @Override
@@ -27,16 +25,12 @@ public class DuplicatesVisitor extends SimpleFileVisitor<Path> {
                                      BasicFileAttributes attributes) throws IOException {
 
         FileProperty fp = new FileProperty(attributes.size(), file.toFile().getName());
-        if (attributes.isRegularFile() && files.putIfAbsent(fp, file.toAbsolutePath().toString()) != null) {
-            if (dubFiles.get(fp) == null) {
-                List<String> paths = new ArrayList<>();
-                paths.add(files.get(fp));
-                paths.add(file.toAbsolutePath().toString());
-                dubFiles.put(fp, paths);
-            } else {
-                List<String> paths = dubFiles.get(fp);
-                paths.add(file.toAbsolutePath().toString());
-            }
+        List<Path> paths = new ArrayList<>();
+        paths.add(file.toAbsolutePath());
+        if (dubFiles.putIfAbsent(fp, paths) != null) {
+            paths = dubFiles.get(fp);
+            paths.add(file.toAbsolutePath());
+            dubFiles.put(fp, paths);
         }
         return super.visitFile(file, attributes);
     }
