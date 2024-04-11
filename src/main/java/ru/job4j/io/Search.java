@@ -23,7 +23,7 @@ public class Search {
             throw new IllegalArgumentException("Use folder name for search. Usage: ' . ' or ' C:\\' ");
         } else if (!args[1].matches("\\.\\w+$")) {
             throw new IllegalArgumentException("Set file extension. Usage: '.exe' or '.js'");
-        }else {
+        } else {
             res = true;
         }
 
