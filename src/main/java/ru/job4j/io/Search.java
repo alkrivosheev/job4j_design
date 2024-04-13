@@ -19,13 +19,14 @@ public class Search {
         boolean res;
         if (args.length < 2) {
             throw new IllegalArgumentException("Parameters are not specified. Usage: ROOT_FOLDER file_extension");
-        } else if (!Files.exists(Path.of(args[0]))) {
-            throw new IllegalArgumentException("Use folder name for search. Usage: ' . ' or ' C:\\' ");
-        } else if (!args[1].matches("\\.\\w+$")) {
-            throw new IllegalArgumentException("Set file extension. Usage: '.exe' or '.js'");
-        } else {
-            res = true;
         }
+        if (!Files.exists(Path.of(args[0])) && Files.isDirectory(Path.of(args[0]))) {
+            throw new IllegalArgumentException("Use folder name for search. Usage: ' . ' or ' C:\\' ");
+        }
+        if (!args[1].matches("\\.\\w+$")) {
+            throw new IllegalArgumentException("Set file extension. Usage: '.exe' or '.js'");
+        }
+            res = true;
 
         return res;
     }
