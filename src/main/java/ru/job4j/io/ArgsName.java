@@ -35,11 +35,11 @@ public class ArgsName {
             throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain an equal sign", arg));
         }
         String key = getKeyFromArgument(arg);
-        if ("".equals(key)) {
+        if (key.isBlank()) {
             throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a key", arg));
         }
         String val = arg.split("=", 2)[1];
-        if ("".equals(val)) {
+        if (val.isBlank()) {
             throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a value", arg));
         }
     }
