@@ -15,22 +15,32 @@ public class ArgsName {
 
     private void parse(String[] args) {
         for (String arg : args) {
-            if (!arg.startsWith("-")) {
-                throw new IllegalArgumentException(String.format("Error: This argument '%s' does not start with a '-' character", arg));
-            }
-            if (!arg.contains("=")) {
-                throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain an equal sign", arg));
-            }
-            String[] params = arg.split("=", 2);
-            String key = params[0].replaceFirst("-", "");
-            if ("".equals(key)) {
-                throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a key", arg));
-            }
-            String val = params[1];
-            if ("".equals(val)) {
-                throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a value", arg));
-            }
+            validateArgument(arg);
+            String key = getKeyFromArgument(arg);
+            String val = arg.split("=", 2)[1];
             values.put(key, val);
+        }
+    }
+
+    private String getKeyFromArgument(String arg) {
+        String[] params = arg.split("=", 2);
+        return params[0].replaceFirst("-", "");
+    }
+
+    private void validateArgument(String arg) {
+        if (!arg.startsWith("-")) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not start with a '-' character", arg));
+        }
+        if (!arg.contains("=")) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain an equal sign", arg));
+        }
+        String key = getKeyFromArgument(arg);
+        if ("".equals(key)) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a key", arg));
+        }
+        String val = arg.split("=", 2)[1];
+        if ("".equals(val)) {
+            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a value", arg));
         }
     }
 
