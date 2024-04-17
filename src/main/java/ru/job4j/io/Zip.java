@@ -12,27 +12,17 @@ import java.util.zip.ZipOutputStream;
 public class Zip {
 
     private final Map<String, String> values = new HashMap<>();
-    private String get(String key) {
-        if (!values.containsKey(key)) {
-            throw new IllegalArgumentException(String.format("This key: '%s' is missing", key));
-        }
-        return values.get(key);
-    }
 
-    private void parse(String[] args) {
-        for (String arg : args) {
-            validateArgument(arg);
-            String key = getKeyFromArgument(arg);
-            String val = arg.split("=", 2)[1];
-            validateParams(key, val);
-            values.put(key, val);
+    private void importValues(String[] args) {
+        ArgsName jvm = ArgsName.of(args);
+        String[] keys = {"d", "e", "o"};
+        for (String key : keys) {
+            String val = jvm.get(key);
+            this.values.put(key, val);
+            this.validateParams(key, val);
         }
     }
 
-    private String getKeyFromArgument(String arg) {
-        String[] params = arg.split("=", 2);
-        return params[0].replaceFirst("-", "");
-    }
 
     private void validateParams(String key, String val) {
         if (!"d".equals(key) && !"e".equals(key) && !"o".equals(key)) {
@@ -51,22 +41,7 @@ public class Zip {
             throw new IllegalArgumentException(String.format("Error: The file extension '%s' must end with '.zip'", val));
         }
     }
-    private void validateArgument(String arg) {
-        if (!arg.startsWith("-")) {
-            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not start with a '-' character", arg));
-        }
-        if (!arg.contains("=")) {
-            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain an equal sign", arg));
-        }
-        String key = getKeyFromArgument(arg);
-        if (key.isBlank()) {
-            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a key", arg));
-        }
-        String val = arg.split("=", 2)[1];
-        if (val.isBlank()) {
-            throw new IllegalArgumentException(String.format("Error: This argument '%s' does not contain a value", arg));
-        }
-    }
+
     public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
             for (Path source : sources) {
@@ -96,9 +71,9 @@ public class Zip {
             throw new IllegalArgumentException("Arguments not passed to program");
         }
         Zip zip = new Zip();
-        zip.parse(args);
-        String d = zip.get("d");
-        List<Path> paths = Search.search(java.nio.file.Path.of(d), path -> !path.toFile().getName().endsWith(zip.get("e")));
-        zip.packFiles(paths, Path.of(zip.get("o")).toFile());
+        zip.importValues(args);
+        String d = zip.values.get("d");
+        List<Path> paths = Search.search(java.nio.file.Path.of(d), path -> !path.toFile().getName().endsWith(zip.values.get("e")));
+        zip.packFiles(paths, Path.of(zip.values.get("o")).toFile());
     }
 }
