@@ -11,34 +11,24 @@ import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
-    private final Map<String, String> values = new HashMap<>();
-
-    private void importValues(String[] args) {
-        ArgsName jvm = ArgsName.of(args);
+    private void validateParams(ArgsName jvm) {
         String[] keys = {"d", "e", "o"};
         for (String key : keys) {
-            String val = jvm.get(key);
-            this.values.put(key, val);
-            this.validateParams(key, val);
-        }
-    }
-
-
-    private void validateParams(String key, String val) {
-        if (!"d".equals(key) && !"e".equals(key) && !"o".equals(key)) {
-            throw new IllegalArgumentException(String.format("Error: The key is not valid '%s' ", key));
-        }
-        if ("d".equals(key) && !Files.exists(Path.of(val))) {
-            throw new IllegalArgumentException(String.format("Error: The folder not found '%s' ", val));
-        }
-        if ("d".equals(key) && !Files.isDirectory(Path.of(val))) {
-            throw new IllegalArgumentException(String.format("Error: This is not Directory '%s' ", val));
-        }
-        if ("e".equals(key) && !val.startsWith(".")) {
-            throw new IllegalArgumentException(String.format("Error: The file extension '%s' must start with '.'", val));
-        }
-        if ("o".equals(key) && !val.endsWith(".zip")) {
-            throw new IllegalArgumentException(String.format("Error: The file extension '%s' must end with '.zip'", val));
+            if (!"d".equals(key) && !"e".equals(key) && !"o".equals(key)) {
+                throw new IllegalArgumentException(String.format("Error: The key is not valid '%s' ", key));
+            }
+            if ("d".equals(key) && !Files.exists(Path.of(jvm.get(key)))) {
+                throw new IllegalArgumentException(String.format("Error: The folder not found '%s' ", jvm.get(key)));
+            }
+            if ("d".equals(key) && !Files.isDirectory(Path.of(jvm.get(key)))) {
+                throw new IllegalArgumentException(String.format("Error: This is not Directory '%s' ", jvm.get(key)));
+            }
+            if ("e".equals(key) && !jvm.get(key).startsWith(".")) {
+                throw new IllegalArgumentException(String.format("Error: The file extension '%s' must start with '.'", jvm.get(key)));
+            }
+            if ("o".equals(key) && !jvm.get(key).endsWith(".zip")) {
+                throw new IllegalArgumentException(String.format("Error: The file extension '%s' must end with '.zip'", jvm.get(key)));
+            }
         }
     }
 
@@ -71,9 +61,10 @@ public class Zip {
             throw new IllegalArgumentException("Arguments not passed to program");
         }
         Zip zip = new Zip();
-        zip.importValues(args);
-        String d = zip.values.get("d");
-        List<Path> paths = Search.search(java.nio.file.Path.of(d), path -> !path.toFile().getName().endsWith(zip.values.get("e")));
-        zip.packFiles(paths, Path.of(zip.values.get("o")).toFile());
+        ArgsName jvm = ArgsName.of(args);
+        zip.validateParams(jvm);
+        String d = jvm.get("d");
+        List<Path> paths = Search.search(java.nio.file.Path.of(d), path -> !path.toFile().getName().endsWith(jvm.get("e")));
+        zip.packFiles(paths, Path.of(jvm.get("o")).toFile());
     }
 }
