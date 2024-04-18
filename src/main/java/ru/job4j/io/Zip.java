@@ -3,32 +3,21 @@ package ru.job4j.io;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Zip {
 
     private void validateParams(ArgsName jvm) {
-        String[] keys = {"d", "e", "o"};
-        for (String key : keys) {
-            if (!"d".equals(key) && !"e".equals(key) && !"o".equals(key)) {
-                throw new IllegalArgumentException(String.format("Error: The key is not valid '%s' ", key));
-            }
-            if ("d".equals(key) && !Files.exists(Path.of(jvm.get(key)))) {
-                throw new IllegalArgumentException(String.format("Error: The folder not found '%s' ", jvm.get(key)));
-            }
-            if ("d".equals(key) && !Files.isDirectory(Path.of(jvm.get(key)))) {
-                throw new IllegalArgumentException(String.format("Error: This is not Directory '%s' ", jvm.get(key)));
-            }
-            if ("e".equals(key) && !jvm.get(key).startsWith(".")) {
-                throw new IllegalArgumentException(String.format("Error: The file extension '%s' must start with '.'", jvm.get(key)));
-            }
-            if ("o".equals(key) && !jvm.get(key).endsWith(".zip")) {
-                throw new IllegalArgumentException(String.format("Error: The file extension '%s' must end with '.zip'", jvm.get(key)));
-            }
+        if (!Files.isDirectory(Path.of(jvm.get("d")))) {
+            throw new IllegalArgumentException(String.format("Error: This is not Directory '%s' ", jvm.get("d")));
+        }
+        if (!jvm.get("e").startsWith(".")) {
+            throw new IllegalArgumentException(String.format("Error: The file extension '%s' must start with '.'", jvm.get("e")));
+        }
+        if (!jvm.get("o").endsWith(".zip")) {
+            throw new IllegalArgumentException(String.format("Error: The file extension '%s' must end with '.zip'", jvm.get("o")));
         }
     }
 
