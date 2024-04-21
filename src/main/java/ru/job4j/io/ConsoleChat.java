@@ -24,8 +24,8 @@ public class ConsoleChat {
         boolean stop = false;
         List<String> log = new ArrayList<>();
         List<String> phrases = readPhrases();
-        String text;
-        while (!(text = in.nextLine()).equals(OUT)) {
+        String text = in.nextLine();
+        while (!text.equals(OUT)) {
             log.add(text);
             if (text.equals(STOP)) {
                 stop = true;
@@ -36,6 +36,7 @@ public class ConsoleChat {
                 System.out.println(answer);
                 log.add(answer);
             }
+            text = in.nextLine();
         }
         log.add(text);
         saveLog(log);
