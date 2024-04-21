@@ -25,11 +25,11 @@ public class ConsoleChat {
         List<String> log = new ArrayList<>();
         List<String> phrases = readPhrases();
         String text = in.nextLine();
-        while (!text.equals(OUT)) {
+        while (!OUT.equals(text)) {
             log.add(text);
-            if (text.equals(STOP)) {
+            if (STOP.equals(text)) {
                 stop = true;
-            } else if (text.equals(CONTINUE)) {
+            } else if (CONTINUE.equals(text)) {
                 stop = false;
             } else if (!stop) {
                 String answer = phrases.get(rn.nextInt(phrases.size()));
