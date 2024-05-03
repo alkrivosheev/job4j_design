@@ -1,7 +1,17 @@
 package ru.job4j.serialization.xml;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAttribute;
+
+@XmlRootElement(name = "contact")
 public class Contact {
-    private final String phone;
+
+    @XmlAttribute
+    private String phone;
+
+    public Contact() {
+
+    }
 
     public Contact(String phone) {
         this.phone = phone;
