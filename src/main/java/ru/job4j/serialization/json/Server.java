@@ -6,6 +6,27 @@ public class Server {
     private final boolean online;
     private final int units;
     private final User user;
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public int getUnits() {
+        return units;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    public String[] getIpAddresses() {
+        return ipAddresses;
+    }
+
     private final String serverName;
     private final String[] ipAddresses;
 
