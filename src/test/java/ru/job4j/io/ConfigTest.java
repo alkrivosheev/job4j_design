@@ -18,7 +18,7 @@ class ConfigTest {
         String path = "./data/app.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("hibernate.connection.driver_class")).isEqualTo("org.postgresql.Driver");
+        assertThat(config.value("connection.driver_class")).isEqualTo("org.postgresql.Driver");
     }
 
     @Test
